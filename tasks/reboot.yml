@@ -1,0 +1,33 @@
+- name: Host Reboot | Set Defaults
+  set_fact:
+    reboot_only_if_needed: True
+  when: reboot_only_if_needed is undefined
+
+- block:
+  - name: Host Reboot | Install yum-utils
+    package:
+      name: yum-utils
+      state: present
+
+  - name: Host Reboot | Detect if reboot is required
+    command: needs-restarting --reboothint
+    register: needs_restart_result
+    failed_when: needs_restart_result.rc > 1
+    changed_when: needs_restart_result.rc == 1
+  when: reboot_only_if_needed
+
+- name: Host Reboot | Shcedule Reboot
+  command: "shutdown --reboot +1 'Reboot invoked by Ansible'"
+  register: redhat_reboot
+  when: needs_restart_result.changed or not reboot_only_if_needed
+
+- name: Host Reboot | Wait for host after reboot
+  wait_for:
+    host: "{{ ansible_hostname }}"
+    delay: 65
+    port: 22
+    state: started
+    timeout: 600
+  delegate_to: localhost
+  become: False
+  when: redhat_reboot.changed

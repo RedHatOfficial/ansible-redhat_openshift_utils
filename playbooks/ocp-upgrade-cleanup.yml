@@ -1,0 +1,13 @@
+# Tasks that need to be completed after an upgrade.
+
+- hosts: all
+  user: root
+  tasks:
+    - name: Exclude packages from update
+      shell: "{{ item }} exclude"
+      with_items:
+        - atomic-openshift-excluder
+        - atomic-openshift-docker-excluder
+
+    - name: Clear the yum cache
+      shell: yum clean all

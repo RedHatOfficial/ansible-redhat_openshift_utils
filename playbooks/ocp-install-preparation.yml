@@ -1,0 +1,102 @@
+- name: OCP | Host Registration
+  hosts: all
+  tasks:
+    - name: Disable all repos
+      command: "subscription-manager repos --disable='*'"
+
+    - name: Enable Required repos
+      command: "subscription-manager repos --enable='{{ item }}'"
+      with_items: "{{ ocp_repositories }}"
+
+- name: OCP | Installing Base Packages
+  hosts: all
+  tasks:
+    - name: Install base packages
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - wget
+        - git
+        - net-tools
+        - bind-utils
+        - iptables-services
+        - bridge-utils
+        - bash-completion
+        - kexec-tools
+        - sos
+        - psacct
+
+    - name: Update all packages
+      package:
+        name: "*"
+        state: latest
+
+    - name: Install OCP utils
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - atomic-openshift-utils
+
+    - name: Install OCP excluder
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - atomic-openshift-excluder
+        - atomic-openshift-docker-excluder
+ 
+    - name: OCP unexclude
+      command: "{{ item }} unexclude"
+      with_items:
+        - atomic-openshift-excluder
+        - atomic-openshift-docker-excluder
+
+    - include_tasks: tasks/reboot.yml
+
+- name: OCP | Installing and Configuring docker
+  hosts: nodes
+  tasks:
+    - name: Install docker
+      package:
+        name: docker
+        state: latest
+
+    - name: Verify docker is correct version
+      command: docker version
+      register: docker_version
+      changed_when: False
+      failed_when: not (docker_version.stdout | search("Version:\s*{{expected_docker_version}}") )
+
+    - name: Set Docker insecure registery options
+      lineinfile:
+        dest: /etc/sysconfig/docker
+        regexp: '^OPTIONS=.*'
+        line: "OPTIONS='--selinux-enabled --insecure-registry 172.30.0.0/16'"
+
+    - name: Configure Docker Storage
+      copy:
+        dest: /etc/sysconfig/docker-storage-setup
+        content: |
+                 DEVS={{ docker_device | default('/dev/vdc') }}
+                 VG=docker-vg
+
+    - name: Docker storage setup
+      command: docker-storage-setup
+
+    - name: Start and Enable docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+- name: OCP | Install OpenShift Ansible packages on installer
+  hosts: localhost
+  tasks:
+    - name: Install OpenShift Ansible packages
+      package:
+        name: "openshift-ansible*"
+        state: latest
+      tags:
+        installer-prep

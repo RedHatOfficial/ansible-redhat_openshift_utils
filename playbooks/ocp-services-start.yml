@@ -1,0 +1,38 @@
+- name: OCP | Start Master Nodes Services
+  hosts: masters
+  tasks:
+    - name: Start ETCD
+      service:
+        name: etcd
+        state: started
+
+    - name: Start OpenShift Master Controller
+      service:
+        name: atomic-openshift-master-controllers
+        state: started
+
+    - name: Start OpenShift Master API
+      service:
+        name: atomic-openshift-master-api
+        state: started
+
+    - name: Start OpenShift Node
+      service:
+        name: atomic-openshift-node
+        state: started
+
+- name: OCP | Start Applicaiton Node Services
+  hosts: app-nodes
+  tasks:
+    - name: Start OpenShift Node
+      service:
+        name: atomic-openshift-node
+        state: started
+
+- name: OCP | Start Infrastructure Nodes Services
+  hosts: infra-nodes
+  tasks:
+    - name: Start OpenShift Node
+      service:
+        name: atomic-openshift-node
+        state: started

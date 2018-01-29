@@ -1,0 +1,10 @@
+# Prune old objects
+- name: OCP | Prune
+  hosts: masters[0]
+  user: root
+  tasks:
+    - name: OCP | Prune Objects
+      shell: "oc adm prune {{ item }} --orphans --keep-complete=1 --keep-failed=0 --confirm"
+      with_items:
+        - builds
+        - deployments

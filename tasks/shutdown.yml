@@ -1,0 +1,14 @@
+- name: Shutdown
+  command: "shutdown +1 'Shutdown invoked by Ansible'"
+  register: redhat_shutdown
+
+- name: Wait for Host to Shutdown
+  wait_for:
+    host: "{{ ansible_hostname }}"
+    delay: 65
+    port: 22
+    state: stopped
+    timeout: 600
+  delegate_to: localhost
+  become: False
+  when: redhat_shutdown.changed
