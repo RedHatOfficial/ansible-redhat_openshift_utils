@@ -1,13 +1,8 @@
-# Tasks that need to be completed after an upgrade.
-
-- hosts: all
-  user: root
+- name: OCP | Upgrade Cleanup
+  hosts: all
   tasks:
-    - name: Exclude packages from update
-      shell: "{{ item }} exclude"
-      with_items:
-        - atomic-openshift-excluder
-        - atomic-openshift-docker-excluder
+    - name: OCP | Upgrade Cleanup | Enable Excluders
+      include_tasks: tasks/enable-excluders.yml
 
-    - name: Clear the yum cache
+    - name: OCP | Upgrade Cleanup | Clear the yum cache
       shell: yum clean all

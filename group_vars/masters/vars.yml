@@ -1,0 +1,5 @@
+---
+ocp_servics:
+  - atomic-openshift-node
+  - atomic-openshift-master-api
+  - atomic-openshift-master-controllers

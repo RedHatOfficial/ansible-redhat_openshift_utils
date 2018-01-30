@@ -1,0 +1,44 @@
+- name: OCP | Update OS | Any package updates required?
+  command: 'yum check-update'
+  args:
+    warn: no
+  register: packages_need_update_result
+  changed_when: packages_need_update_result.rc == 100
+  failed_when: packages_need_update_result.rc != 0 and packages_need_update_result.rc != 100
+
+- block:
+    - name: OCP | Update OS | Validate Variables
+      assert:
+        that:
+          - "ocp_services is defined"
+          - "ocp_oc_tools_host is defined"
+
+    - name: OCP | Update OS | Unschedule and Drain
+      include_tasks: tasks/unschedule-and-drain.yml
+      delegate_to: "{{ ocp_oc_tools_host }}"
+    
+    - name: OCP | Update OS | Enable Excluders
+      include_tasks: tasks/enable-excluders.yml
+    
+    - name: OCP | Update OS | Disalbe Services
+      service:
+        name: "{{ item }}"
+        state: stopped
+      with_items: "{{ ocp_services }}"
+    
+    - name: OCP | Update OS | Update Packages
+      package:
+        name: '*'
+        state: latest
+    
+    - name: OCP | Update OS | Host Reboot
+      include_tasks: tasks/reboot.yml
+      vars:
+        reboot_only_if_needed: False
+    
+    # do this with a retry because I have seen it just randomly fail and then work on the next attempt
+    - name: OCP | Update OS | Schedule Node
+      command: "oc adm manage-node {{ ansible_fqdn }} --schedulable=true"
+      delegate_to: "{{ ocp_oc_tools_host }}"
+      when: ocp_node_schedulable
+  when: packages_need_update_result | changed

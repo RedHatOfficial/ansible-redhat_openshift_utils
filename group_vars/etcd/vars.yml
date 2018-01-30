@@ -1,0 +1,3 @@
+---
+ocp_servics:
+  - etcd

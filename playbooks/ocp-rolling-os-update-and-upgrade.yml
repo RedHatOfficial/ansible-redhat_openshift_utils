@@ -1,0 +1,45 @@
+---
+# Operating System Updates and Upgrades for OCP hosts.
+#
+# NOTE: Currently this assumes ETCD is on master nodes, because why wouldn't they be?
+#       Pull requests welcome to make it so it can handle etcd on masters or on own nodes.
+#
+# @see https://docs.openshift.com/container-platform/3.6/install_config/upgrading/os_upgrades.html
+- name: OCP | OS Update and Upgrade | Masters
+  hosts: masters
+  serial: 1
+  tasks:
+    - name: OCP | OS Update and Upgrade | Masters | Include Tasks
+      include_tasks: tasks/os-update-and-upgrade.yml
+      vars:
+        ocp_services:
+          - atomic-openshift-node
+          - atomic-openshift-master-api
+          - atomic-openshift-master-controllers
+          - etcd
+        ocp_node_schedulable: False
+        ocp_oc_tools_host: "{{ hostvars[groups['masters'][0]]['ansible_fqdn'] }}"
+
+- name: OCP | OS Update and Upgrade | Infra Nodes
+  hosts: infra-nodes
+  serial: 1
+  tasks:
+    - name: OCP | OS Update and Upgrade | Infra Nodes | Include Tasks
+      include_tasks: tasks/os-update-and-upgrade.yml
+      vars:
+        ocp_services:
+          - atomic-openshift-node
+        ocp_node_schedulable: True
+        ocp_oc_tools_host: "{{ hostvars[groups['masters'][0]]['ansible_fqdn'] }}"
+
+- name: OCP | OS Update and Upgrade | App Nodes
+  hosts: app-nodes
+  serial: 1
+  tasks:
+    - name: OCP | OS Update and Upgrade | App Nodes | Include Tasks
+      include_tasks: tasks/os-update-and-upgrade.yml
+      vars:
+        ocp_services:
+          - atomic-openshift-node
+        ocp_node_schedulable: True
+        ocp_oc_tools_host: "{{ hostvars[groups['masters'][0]]['ansible_fqdn'] }}"
