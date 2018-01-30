@@ -1,4 +1,3 @@
-# Prune old objects
 - name: OCP | Prune
   hosts: masters[0]
   tasks:
