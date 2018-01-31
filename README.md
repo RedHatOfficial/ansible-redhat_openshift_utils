@@ -16,4 +16,10 @@ Performs a rolling (one host at a time) operating system (OS) update and/or upgr
 * infra-nodes
 * app-nodes
 
+### ocp-upgrade-preparation.yml
+Performs the steps should be preforemd before [Performing Automated In-place Cluster Upgrades](https://docs.openshift.com/container-platform/latest/install_config/upgrading/automated_upgrades.html). Specifically before running the appropriate upgrade playbook in the [openshift-ansible](https://github.com/openshift/openshift-ansible/) project.
 
+This is essentially an assible version of [Preparing for an Automated Upgrade] (https://docs.openshift.com/container-platform/latest/install_config/upgrading/automated_upgrades.html#preparing-for-an-automated-upgrade).
+
+### ocp-upgrade-cleanup.yml
+Performs the steps that should be prefored after [Performing Automated In-place Cluster Upgrades](https://docs.openshift.com/container-platform/latest/install_config/upgrading/automated_upgrades.html). Specifically after running the appropriate upgrade playbookin the [openshift-ansible](https://github.com/openshift/openshift-ansible/) project.

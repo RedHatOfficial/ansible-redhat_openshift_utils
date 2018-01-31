@@ -1,18 +1,8 @@
 # Tasks that need to be completed before a OCP upgrade.
 #
-# REQUIRED VARIABLES
-#   ocp_repository - Name of the OCP repository to enable for the upcoming upgrade
+# @param ocp_repositories 
 #
-# EXAMPLE EXECUTIONS:
-#   Prepare for Upgrade to OCP 3.2
-#     > ansible-playbook ocp-upgrade-prereqs-playbook.yml --extra-vars "ocp_repository=rhel-7-server-ose-3.2-rpms"
-#
-#   Prepare for Upgrade to OCP 3.3
-#     > ansible-playbook ocp-upgrade-prereqs-playbook.yml --extra-vars "ocp_repository=rhel-7-server-ose-3.3-rpms"
-#
-#   Prepare for Upgrade to OCP 3.4
-#     > ansible-playbook ocp-upgrade-prereqs-playbook.yml --extra-vars "ocp_repository=rhel-7-server-ose-3.4-rpms"
-
+# @see https://docs.openshift.com/container-platform/latest/install_config/upgrading/automated_upgrades.html#preparing-for-an-automated-upgrade
 - name: OCP | Upgrade Preperation
   hosts: all
   user: root
