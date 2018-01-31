@@ -1,3 +1,6 @@
+- name: OCP | Update OS | Include Tasks for Enable Excluders
+  include_tasks: tasks/enable-excluders.yml
+
 - name: OCP | Update OS | Any package updates required?
   command: 'yum check-update'
   args:
@@ -16,9 +19,6 @@
     - name: OCP | Update OS | Include Tasks for Unschedule and Drain
       include_tasks: tasks/unschedule-and-drain.yml
       delegate_to: "{{ ocp_oc_tools_host }}"
-    
-    - name: OCP | Update OS | Include Tasks for Enable Excluders
-      include_tasks: tasks/enable-excluders.yml
     
     - name: OCP | Update OS | Disalbe Services
       service:
