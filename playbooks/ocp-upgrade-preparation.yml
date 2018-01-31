@@ -13,27 +13,24 @@
 #   Prepare for Upgrade to OCP 3.4
 #     > ansible-playbook ocp-upgrade-prereqs-playbook.yml --extra-vars "ocp_repository=rhel-7-server-ose-3.4-rpms"
 
-- name: OCP Upgrade Prerequisites
+- name: OCP | Upgrade Preperation
   hosts: all
   user: root
   tasks:
-    - name: Disable All Repositories
+    - name: OCP | Upgrade Preperation | Disable All Repositories
       command: "subscription-manager repos --disable='*'"
 
-    - name: Enable Required Repositories
+    - name: OCP | Upgrade Preperation | Enable Required Repositories
       command: "subscription-manager repos --enable='{{ item }}'"
       with_items: "{{ ocp_repositories }}"
 
-    - name: Unexclude packages from update
-      command: "{{ item }} unexclude"
-      with_items:
-        - atomic-openshift-excluder
-        - atomic-openshift-docker-excluder
+    - name: OCP | Upgrade Preperation | Include Disable Excluders Tasks
+      include_tasks: tasks/disable-excluders.yml
 
-    - name: Clear the yum cache
+    - name: OCP | Upgrade Preperation | Clear the yum cache
       command: yum clean all
 
-    - name: Update atomic-openshift packages required for Update or Upgrade
+    - name: OCP | Upgrade Preperation | Update atomic-openshift packages required for Update or Upgrade
       yum:
         name: "{{ item }}"
         state: latest
@@ -43,17 +40,14 @@
         - atomic-openshift-docker-excluder
 
     # This is needed because if the excluders update then they set exclusion again
-    - name: Unexclude packages from update after excluder update
-      command: "{{ item }} unexclude"
-      with_items:
-        - atomic-openshift-excluder
-        - atomic-openshift-docker-excluder
+    - name: OCP | Upgrade Preperation | Include Disable Excluders Tasks After Excluders Updates
+      include_tasks: tasks/disable-excluders.yml
 
-- name: OCP Upgrade Optional Prerequisists - Masters
+- name: OCP | Upgrade Preperation | Optional Steps
   hosts: masters
   user: root
   tasks:
-   - name: Create examples directory
+   - name: OCP | Upgrade Preperation | Optional Steps | Create examples directory
      file:
        path: /usr/share/openshift/examples
        owner: root
@@ -62,7 +56,7 @@
        state: directory
        recurse: true
 
-   - name: Update examples
+   - name: OCP | Upgrade Preperation | Optional Steps | Update examples
      synchronize:
        src: "/usr/share/ansible/openshift-ansible/roles/openshift_examples/files/examples/v{{ ocp_version }}"
        dest: /usr/share/openshift/examples

@@ -1,8 +1,10 @@
 - name: OCP | Upgrade Cleanup
   hosts: all
   tasks:
-    - name: OCP | Upgrade Cleanup | Enable Excluders
+    - name: OCP | Upgrade Cleanup | Include Tasks for Enable Excluders
       include_tasks: tasks/enable-excluders.yml
 
     - name: OCP | Upgrade Cleanup | Clear the yum cache
-      shell: yum clean all
+      command: 'yum clean all'
+      args:
+        warn: no

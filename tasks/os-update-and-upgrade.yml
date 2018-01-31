@@ -13,11 +13,11 @@
           - "ocp_services is defined"
           - "ocp_oc_tools_host is defined"
 
-    - name: OCP | Update OS | Unschedule and Drain
+    - name: OCP | Update OS | Include Tasks for Unschedule and Drain
       include_tasks: tasks/unschedule-and-drain.yml
       delegate_to: "{{ ocp_oc_tools_host }}"
     
-    - name: OCP | Update OS | Enable Excluders
+    - name: OCP | Update OS | Include Tasks for Enable Excluders
       include_tasks: tasks/enable-excluders.yml
     
     - name: OCP | Update OS | Disalbe Services
@@ -31,7 +31,7 @@
         name: '*'
         state: latest
     
-    - name: OCP | Update OS | Host Reboot
+    - name: OCP | Update OS | Include Tasks for Host Reboot
       include_tasks: tasks/reboot.yml
       vars:
         reboot_only_if_needed: False

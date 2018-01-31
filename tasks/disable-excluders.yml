@@ -1,0 +1,5 @@
+- name: OCP | Disable Excluders
+  shell: "{{ item }} unexclude"
+  with_items:
+    - atomic-openshift-excluder
+    - atomic-openshift-docker-excluder
