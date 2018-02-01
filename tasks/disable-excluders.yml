@@ -1,5 +1,14 @@
-- name: OCP | Disable Excluders
-  shell: "{{ item }} unexclude"
+---
+- name: OCP | Excluders | Are disabled/unexcluded?
+  command: "{{ item }} status" # returns status either 'exclude' or 'unexclude' and 0 or 1 respectively
   with_items:
     - atomic-openshift-excluder
     - atomic-openshift-docker-excluder
+  changed_when: ocp_excluders_state_result.rc == 0
+  failed_when: ocp_excluders_state_result.rc not in [0,1]
+  register: ocp_excluders_state_result
+
+- name: OCP | Excluders | Disable/Unexlude
+  shell: "{{ item.item }} unexclude"
+  when: item | changed
+  with_items: "{{ ocp_excluders_state_result.results }}"
