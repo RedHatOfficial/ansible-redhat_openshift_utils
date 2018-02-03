@@ -1,0 +1,29 @@
+---
+# {{ ansible_managed }}
+
+kind: LDAPSyncConfig
+apiVersion: v1
+url: "ldap://{{ ocp_ldap_server_fqdn }}"
+insecure: true 
+bindDN: "{{ ocp_ldap_bind_dn }}"
+bindPassword: "{{ ocp_ldap_bind_password }}"
+groupUIDNameMapping:
+{% for ldap_group_dn, ocp_group in ocp_ldap_group_uid_name_mapping.iteritems() %}
+  "{{ ldap_group_dn }}": "{{ ocp_group }}"
+{% endfor %}
+rfc2307:
+    groupsQuery:
+        baseDN: "{{ ocp_ldap_groups_query_base_dn }}"
+        scope: sub
+        derefAliases: never
+        filter: (objectclass=groupofnames)
+    groupUIDAttribute: dn
+    groupNameAttributes: [ cn ]
+    groupMembershipAttributes: [ member ]
+    usersQuery:
+        baseDN: "{{ ocp_ldap_users_query_base_dn }}"
+        scope: sub
+        derefAliases: never
+    userUIDAttribute: dn
+    userNameAttributes: [ uid ]
+

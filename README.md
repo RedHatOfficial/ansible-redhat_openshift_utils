@@ -23,3 +23,16 @@ This is essentially an assible version of [Preparing for an Automated Upgrade] (
 
 ### ocp-upgrade-cleanup.yml
 Performs the steps that should be prefored after [Performing Automated In-place Cluster Upgrades](https://docs.openshift.com/container-platform/latest/install_config/upgrading/automated_upgrades.html). Specifically after running the appropriate upgrade playbookin the [openshift-ansible](https://github.com/openshift/openshift-ansible/) project.
+
+### ocp-ldap-groups-sync.yml
+Performs an ldap group sync.
+
+#### Options
+| parameter                       | required | default | choices | comments
+|---------------------------------|----------|---------|---------|---------------------------------------------
+| ocp_ldap_server_fqdn            | yes      |         |         | FQDN of the LDAP server
+| ocp_ldap_bind_dn                | yes      |         |         | Bind DN to usu
+| ocp_ldap_bind_password          | yes      |         |         | Bind passwrod assoicated with the `ocp_ldap_bind_dn`
+| ocp_ldap_groups_query_base_dn   | yes      |         |         | Base DN for looking for LDAP groups
+| ocp_ldap_users_query_base_dn    | yes      |         |         | Base DN for looking for LDAP users
+| ocp_ldap_group_uid_name_mapping | yes      |         |         | Hash of LDAP group DNs to OCP group names to map
