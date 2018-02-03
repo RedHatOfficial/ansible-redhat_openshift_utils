@@ -1,3 +1,4 @@
+---
 - name: OCP | Shutdown Applicaiton Nodes
   hosts: app-nodes
   tasks:

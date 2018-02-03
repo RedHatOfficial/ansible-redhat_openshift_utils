@@ -1,3 +1,4 @@
+---
 - name: OCP | Start Master Nodes Services
   hosts: masters
   tasks:

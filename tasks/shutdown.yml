@@ -1,3 +1,4 @@
+---
 - name: Shutdown
   command: "shutdown +1 'Shutdown invoked by Ansible'"
   register: redhat_shutdown

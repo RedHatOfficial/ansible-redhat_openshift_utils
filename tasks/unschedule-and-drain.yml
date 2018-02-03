@@ -1,3 +1,4 @@
+---
 - name: OCP | Unschedule Node
   command: "oc adm manage-node {{ ansible_fqdn }} --schedulable=false"
 

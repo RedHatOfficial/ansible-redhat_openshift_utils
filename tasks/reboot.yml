@@ -1,3 +1,4 @@
+---
 - name: Host Reboot | Set Defaults
   set_fact:
     reboot_only_if_needed: True

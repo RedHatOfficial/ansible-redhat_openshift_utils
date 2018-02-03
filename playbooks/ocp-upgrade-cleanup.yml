@@ -1,3 +1,4 @@
+---
 - name: OCP | Upgrade Cleanup
   hosts: all
   tasks:

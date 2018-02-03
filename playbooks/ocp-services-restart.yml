@@ -1,3 +1,4 @@
+---
 - name: OCP | Stop Applicaiton Node Services
   hosts: app-nodes
   tasks:
