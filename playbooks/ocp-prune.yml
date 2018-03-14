@@ -7,4 +7,3 @@
       with_items:
         - builds
         - deployments
-        - images
