@@ -28,11 +28,12 @@ Performs the steps that should be prefored after [Performing Automated In-place 
 Performs an ldap group sync.
 
 #### Options
-| parameter                       | required | default | choices | comments
-|---------------------------------|----------|---------|---------|---------------------------------------------
-| ocp_ldap_server_fqdn            | yes      |         |         | FQDN of the LDAP server
-| ocp_ldap_bind_dn                | yes      |         |         | Bind DN to usu
-| ocp_ldap_bind_password          | yes      |         |         | Bind passwrod assoicated with the `ocp_ldap_bind_dn`
-| ocp_ldap_groups_query_base_dn   | yes      |         |         | Base DN for looking for LDAP groups
-| ocp_ldap_users_query_base_dn    | yes      |         |         | Base DN for looking for LDAP users
-| ocp_ldap_group_uid_name_mapping | yes      |         |         | Hash of LDAP group DNs to OCP group names to map
+| parameter                            | required | default | choices     | comments
+|--------------------------------------|----------|---------|-------------|---------------------------------------------
+| ocp\_ldap\_server\_fqdn              | yes      |         |             | FQDN of the LDAP server
+| ocp\_ldap\_bind\_dn                  | yes      |         |             | Bind DN to usu
+| ocp\_ldap\_bind\_password            | yes      |         |             | Bind passwrod assoicated with the `ocp_ldap_bind_dn`
+| ocp\_ldap\_groups\_query\_base\_dn   | yes      |         |             | Base DN for looking for LDAP groups
+| ocp\_ldap\_users\_query\_base\_dn    | yes      |         |             | Base DN for looking for LDAP users
+| ocp\_ldap\_group\_uid\_name\_mapping | yes      |         |             | Hash of LDAP group DNs to OCP group names to map
+| ocp\_ldap\_insecure                  | no       | false   | true, false | Whether to use insecure connection to LDAP
