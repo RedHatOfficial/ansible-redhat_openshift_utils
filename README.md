@@ -37,3 +37,4 @@ Performs an ldap group sync.
 | ocp\_ldap\_users\_query\_base\_dn    | yes      |         |             | Base DN for looking for LDAP users
 | ocp\_ldap\_group\_uid\_name\_mapping | yes      |         |             | Hash of LDAP group DNs to OCP group names to map
 | ocp\_ldap\_insecure                  | no       | false   | true, false | Whether to use insecure connection to LDAP
+| ocp\_ldap\_ca                        | no       |         |             | Path to CA for LDAP server
