@@ -4,7 +4,7 @@
 kind: LDAPSyncConfig
 apiVersion: v1
 url: "ldap://{{ ocp_ldap_server_fqdn }}"
-insecure: "{{ ocp_ldap_insecure | default(false) }}"
+insecure: {{ ocp_ldap_insecure | default(false) }}
 bindDN: "{{ ocp_ldap_bind_dn }}"
 bindPassword: "{{ ocp_ldap_bind_password }}"
 groupUIDNameMapping:
