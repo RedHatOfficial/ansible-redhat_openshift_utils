@@ -38,3 +38,4 @@ Performs an ldap group sync.
 | ocp\_ldap\_group\_uid\_name\_mapping | yes      |         |             | Hash of LDAP group DNs to OCP group names to map
 | ocp\_ldap\_insecure                  | no       | false   | true, false | Whether to use insecure connection to LDAP
 | ocp\_ldap\_ca                        | no       |         |             | Path to CA for LDAP server
+| ocp\_projects\_group\_roll\_mapping  | no       |         |             | Array of dictionaries mapping a group and role to a projects
