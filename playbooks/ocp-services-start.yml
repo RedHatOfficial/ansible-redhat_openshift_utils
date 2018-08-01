@@ -22,16 +22,16 @@
         name: atomic-openshift-node
         state: started
 
-- name: OCP | Start Applicaiton Node Services
-  hosts: app-nodes
+- name: OCP | Start Infrastructure Nodes Services
+  hosts: infra-nodes
   tasks:
     - name: Start OpenShift Node
       service:
         name: atomic-openshift-node
         state: started
 
-- name: OCP | Start Infrastructure Nodes Services
-  hosts: infra-nodes
+- name: OCP | Start Applicaiton Node Services
+  hosts: app-nodes
   tasks:
     - name: Start OpenShift Node
       service:
