@@ -1,4 +1,13 @@
 ---
+- name: OCP | Update Excluders
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - atomic-openshift-excluder
+    - atomic-openshift-docker-excluder
+  register: excluder_pkg_update
+ 
 - name: OCP | Excluders | Are enabled/excluded?
   command: "{{ item }} status" # returns status either 'exclude' or 'unexclude' and 0 or 1 respectively
   with_items:
@@ -10,5 +19,5 @@
 
 - name: OCP | Excluders | Enable/Exclude
   shell: "{{ item.item }} exclude"
-  when: item | changed
+  when: item | changed or excluder_pkg_update | changed
   with_items: "{{ ocp_excluders_state_result.results }}"
