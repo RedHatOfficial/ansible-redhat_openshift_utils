@@ -23,12 +23,9 @@
   when: needs_restart_result.changed or not reboot_only_if_needed
 
 - name: Host Reboot | Wait for host after reboot
-  wait_for:
-    host: "{{ ansible_hostname }}"
-    delay: 65
-    port: 22
-    state: started
-    timeout: 600
+  wait_for_connection:
+    delay: 30
+    timeout: 300
   delegate_to: localhost
   become: False
   when: redhat_reboot.changed
