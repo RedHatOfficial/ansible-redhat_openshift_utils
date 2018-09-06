@@ -6,30 +6,31 @@
     ocp_ldap_groups_sync_file: '/tmp/ocp_ldap_groups_sync.yml'
     ocp_ldap_whitelist_file: '/tmp/ocp_ldap_whitelist.txt'
   tasks:
-    - name: OCP | LDAP Groups Sync | Validate variables
-      assert:
-        that:
-          - "ocp_ldap_server_fqdn is defined"
-          - "ocp_ldap_bind_dn is defined"
-          - "ocp_ldap_bind_password is defined"
-          - "ocp_ldap_groups_query_base_dn is defined"
-          - "ocp_ldap_users_query_base_dn is defined"
-          - "ocp_ldap_group_uid_name_mapping is defined"
+  - name: OCP | LDAP Groups Sync | Validate variables
+    assert:
+      that:
+      - "ocp_ldap_server_fqdn is defined"
+      - "ocp_ldap_bind_dn is defined"
+      - "ocp_ldap_bind_password is defined"
+      - "ocp_ldap_groups_query_base_dn is defined"
+      - "ocp_ldap_users_query_base_dn is defined"
+      - "ocp_ldap_group_uid_name_mapping is defined"
 
-    - name: OCP | LDAP Groups Sync | Create group sync config file
-      template:
-        src: "templates/ocp_ldap_groups_sync.yml.j2"
-        dest: "{{ ocp_ldap_groups_sync_file }}"
+  - name: OCP | LDAP Groups Sync | Create group sync config file
+    template:
+      src: "templates/ocp_ldap_groups_sync.yml.j2"
+      dest: "{{ ocp_ldap_groups_sync_file }}"
 
-    - name: OCP | LDAP Groups Sync | Create whitelist file
-      template:
-        src: "templates/ocp_ldap_whitelist.txt.j2"
-        dest: "{{ ocp_ldap_whitelist_file }}"
+  - name: OCP | LDAP Groups Sync | Create whitelist file
+    template:
+      src: "templates/ocp_ldap_whitelist.txt.j2"
+      dest: "{{ ocp_ldap_whitelist_file }}"
 
-    - name: OCP | LDAP Groups Sync | Sync
-      command: "oc adm groups sync --whitelist={{ ocp_ldap_whitelist_file }} --sync-config={{ ocp_ldap_groups_sync_file }} --confirm"
+  - name: OCP | LDAP Groups Sync | Sync
+    command: "oc adm groups sync --whitelist={{ ocp_ldap_whitelist_file }} --sync-config={{ ocp_ldap_groups_sync_file }} --confirm"
 
+  - block:
     - name: OCP | LDAP Groups Sync | Project Role to Group Mapping
       command: "oc adm policy add-role-to-group {{ item.0.role }} {{ item.0.group }} -n {{ item.1 }}"
       loop: "{{ ocp_projects_group_roll_mapping | subelements('projects') }}"
-      when: ocp_projects_group_roll_mapping is defined
+    when: ocp_projects_group_roll_mapping is defined
