@@ -32,5 +32,5 @@
   - block:
     - name: OCP | LDAP Groups Sync | Project Role to Group Mapping
       command: "oc adm policy add-role-to-group {{ item.0.role }} {{ item.0.group }} -n {{ item.1 }}"
-      loop: "{{ ocp_projects_group_roll_mapping | subelements('projects') }}"
+      loop: "{{ (ocp_projects_group_roll_mapping | default([])) | subelements('projects') }}"
     when: ocp_projects_group_roll_mapping is defined
