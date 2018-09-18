@@ -18,7 +18,7 @@
           - "ocp_oc_tools_host is defined"
 
     - name: OCP | Update OS | Include Tasks for Unschedule and Drain
-      include_tasks: tasks/unschedule-and-drain.yml
+      import_tasks: tasks/unschedule-and-drain.yml
       delegate_to: "{{ ocp_oc_tools_host }}"
     
     - name: OCP | Update OS | Disalbe Services
