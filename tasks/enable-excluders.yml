@@ -19,5 +19,5 @@
 
 - name: OCP | Excluders | Enable/Exclude
   shell: "{{ item.item }} exclude"
-  when: item | changed or excluder_pkg_update | changed
+  when: item is changed or excluder_pkg_update is changed
   with_items: "{{ ocp_excluders_state_result.results }}"

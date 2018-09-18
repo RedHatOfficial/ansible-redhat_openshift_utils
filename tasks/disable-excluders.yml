@@ -10,5 +10,5 @@
 
 - name: OCP | Excluders | Disable/Unexlude
   shell: "{{ item.item }} unexclude"
-  when: item | changed
+  when: item is changed
   with_items: "{{ ocp_excluders_state_result.results }}"

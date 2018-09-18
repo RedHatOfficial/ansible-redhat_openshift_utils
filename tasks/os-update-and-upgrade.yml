@@ -42,4 +42,4 @@
       command: "oc adm manage-node {{ ansible_fqdn }} --schedulable=true"
       delegate_to: "{{ ocp_oc_tools_host }}"
       when: ocp_node_schedulable
-  when: packages_need_update_result | changed
+  when: packages_need_update_result is changed

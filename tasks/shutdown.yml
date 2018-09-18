@@ -12,4 +12,4 @@
     timeout: 600
   delegate_to: localhost
   become: False
-  when: redhat_shutdown.changed
+  when: redhat_shutdown is changed
