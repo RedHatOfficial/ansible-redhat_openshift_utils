@@ -1,0 +1,38 @@
+---
+# glusterfs_check_containerized is a custom module defined at
+# library/glusterfs_check_containerized.py
+# @source https://raw.githubusercontent.com/openshift/openshift-ansible/release-3.11/roles/lib_utils/library/glusterfs_check_containerized.py
+- name: OCP | Check for GlusterFS App (Default) Cluster health
+  glusterfs_check_containerized:
+    oc_bin: "{{ openshift_client_binary }}"
+    oc_conf: "{{ openshift_config_base }}/master/admin.kubeconfig"
+    oc_namespace: "{{ openshift_storage_glusterfs_namespace }}"
+    cluster_name: "{{ openshift_storage_glusterfs_name }}"
+    exclude_node: "{{ openshift_node_name }}"
+  delegate_to: "{{ openshift_oc_tools_host }}"
+  retries: "{{ (openshift_storage_glusterfs_health_timeout | int / 10) | int }}"
+  delay: 10
+  register: glusterfs_check_containerized_res
+  until: glusterfs_check_containerized_res is succeeded
+  when:
+  - "'glusterfs' in groups"
+  - "groups['glusterfs'] | length > 0"
+
+# glusterfs_check_containerized is a custom module defined at
+# library/glusterfs_check_containerized.py
+# @source https://raw.githubusercontent.com/openshift/openshift-ansible/release-3.11/roles/lib_utils/library/glusterfs_check_containerized.py
+- name: OCP | Check for GlusterFS Infra (Registry) Cluster health
+  glusterfs_check_containerized:
+    oc_bin: "{{ openshift_client_binary }}"
+    oc_conf: "{{ openshift_config_base }}/master/admin.kubeconfig"
+    oc_namespace: "{{ openshift_storage_glusterfs_registry_namespace }}"
+    cluster_name: "{{ openshift_storage_glusterfs_registry_name }}"
+    exclude_node: "{{ openshift_node_name }}"
+  delegate_to: "{{ openshift_oc_tools_host }}"
+  retries: "{{ (openshift_storage_glusterfs_health_timeout | int / 10) | int }}"
+  delay: 10
+  register: glusterfs_check_containerized_res
+  until: glusterfs_check_containerized_res is succeeded
+  when:
+  - "'glusterfs_registry' in groups"
+  - "groups['glusterfs_registry'] | length > 0"

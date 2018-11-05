@@ -5,41 +5,58 @@
 #       Pull requests welcome to make it so it can handle etcd on masters or on own nodes.
 #
 # @see https://docs.openshift.com/container-platform/3.6/install_config/upgrading/os_upgrades.html
+- name: OCP | OS Update and Upgrade
+  hosts: all
+  gather_facts: True
+  tasks:
+  - name: OCP | OS Update and Upgrade | Set facts
+    set_fact:
+      openshift_oc_tools_host: "{{ groups['masters'][0] }}"
+
 - name: OCP | OS Update and Upgrade | Masters
   hosts: masters
+  gather_facts: False
   serial: 1
   tasks:
-    - name: OCP | OS Update and Upgrade | Masters | Include Tasks
-      include_tasks: tasks/os-update-and-upgrade.yml
-      vars:
-        ocp_services:
-          - atomic-openshift-node
-          - atomic-openshift-master-api
-          - atomic-openshift-master-controllers
-          - etcd
-        ocp_node_schedulable: False
-        ocp_oc_tools_host: "{{ hostvars[groups['masters'][0]]['ansible_fqdn'] }}"
+  - name: OCP | OS Update and Upgrade | Masters | Determine services
+    set_fact:
+      openshift_services:
+      - atomic-openshift-node
+      - docker
+      - atomic-openshift-master-api
+      - atomic-openshift-master-controllers
+      - etcd
+    when: openshift_services is not defined
+
+  - name: OCP | OS Update and Upgrade | Masters | Include Tasks
+    include_tasks: tasks/os-update-and-upgrade.yml
 
 - name: OCP | OS Update and Upgrade | Infra Nodes
   hosts: infra-nodes
+  gather_facts: False
   serial: 1
   tasks:
-    - name: OCP | OS Update and Upgrade | Infra Nodes | Include Tasks
-      include_tasks: tasks/os-update-and-upgrade.yml
-      vars:
-        ocp_services:
-          - atomic-openshift-node
-        ocp_node_schedulable: True
-        ocp_oc_tools_host: "{{ hostvars[groups['masters'][0]]['ansible_fqdn'] }}"
+  - name: OCP | OS Update and Upgrade | Infra Nodes | Determine services
+    set_fact:
+      openshift_services:
+      - atomic-openshift-node
+      - docker
+    when: openshift_services is not defined
+
+  - name: OCP | OS Update and Upgrade | Infra Nodes | Include Tasks
+    include_tasks: tasks/os-update-and-upgrade.yml
 
 - name: OCP | OS Update and Upgrade | App Nodes
   hosts: app-nodes
+  gather_facts: False
   serial: 1
   tasks:
-    - name: OCP | OS Update and Upgrade | App Nodes | Include Tasks
-      include_tasks: tasks/os-update-and-upgrade.yml
-      vars:
-        ocp_services:
-          - atomic-openshift-node
-        ocp_node_schedulable: True
-        ocp_oc_tools_host: "{{ hostvars[groups['masters'][0]]['ansible_fqdn'] }}"
+  - name: OCP | OS Update and Upgrade | App Nodes | Determine services
+    set_fact:
+      openshift_services:
+      - atomic-openshift-node
+      - docker
+    when: openshift_services is not defined
+
+  - name: OCP | OS Update and Upgrade | App Nodes | Include Tasks
+    include_tasks: tasks/os-update-and-upgrade.yml

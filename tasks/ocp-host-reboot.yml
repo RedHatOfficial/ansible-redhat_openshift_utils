@@ -1,0 +1,21 @@
+---
+# ensure gluster is healthy before stopping another node
+- include_role:
+    name: openshift_storage_glusterfs_cluster_health
+
+- name: OCP | Reboot Master Nodes | Include Tasks for Unschedule and Drain
+  import_tasks: tasks/unschedule-and-drain.yml
+  delegate_to: "{{ openshift_oc_tools_host }}"
+
+- name: OCP | Reboot Master Nodes | Stop OpenShift Master Node Services
+  service:
+    name: "{{ item }}"
+    state: stopped
+  loop: "{{ openshift_services }}"
+
+- name: OCP | Reboot Master Nodes | Include reboot tasks
+  include_tasks: tasks/reboot.yml
+  vars:
+    reboot_only_if_needed: False
+
+- include_tasks: tasks/wait-for-node-ready.yml
