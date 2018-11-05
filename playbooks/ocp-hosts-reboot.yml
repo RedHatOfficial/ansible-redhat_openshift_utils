@@ -2,53 +2,56 @@
 - name: OCP | Stop Application Nodes Services
   hosts: app-nodes
   tasks:
-    - name: Stop OpenShift Node
+    - name: Stop OpenShift App Node Services
       service:
-        name: atomic-openshift-node
+        name: "{{ item }}"
         state: stopped
+      loop:
+        - atomic-openshift-node
+        - docker
 
 - name: OCP | Stop Infrastructure Nodes Services
   hosts: infra-nodes
   tasks:
-    - name: Stop OpenShift Node
+    - name: Stop OpenShift Infra Node Services
       service:
-        name: atomic-openshift-node
+        name: "{{ item }}"
         state: stopped
+      loop:
+        - atomic-openshift-node
+        - docker
 
 - name: OCP | Stop Master Nodes Services
   hosts: masters
   tasks:
-    - name: Stop OpenShift Node
+    - name: Stop OpenShift Master Node Services
       service:
-        name: atomic-openshift-node
+        name: "{{ item }}"
         state: stopped
-
-    - name: Stop OpenShift Master API
-      service:
-        name: atomic-openshift-master-api
-        state: stopped
-
-    - name: Stop OpenShift Master Controller
-      service:
-        name: atomic-openshift-master-controllers
-        state: stopped
-
-    - name: Stop ETCD
-      service:
-        name: etcd
-        state: stopped
+      loop:
+        - atomic-openshift-node
+        - docker
+        - atomic-openshift-master-api
+        - atomic-openshift-master-controllers
+        - etcd
 
 - name: OCP | Reboot Master Nodes Hosts
   hosts: masters
   tasks:
     - include_tasks: tasks/reboot.yml
+      vars:
+        reboot_only_if_needed: False
 
 - name: OCP | Reboot Infrastructure Nodes Hosts
   hosts: infra-nodes
   tasks:
     - include_tasks: tasks/reboot.yml
+      vars:
+        reboot_only_if_needed: False
 
 - name: OCP | Reboot Application Node Hosts
   hosts: app-nodes
   tasks:
     - include_tasks: tasks/reboot.yml
+      vars:
+        reboot_only_if_needed: False
