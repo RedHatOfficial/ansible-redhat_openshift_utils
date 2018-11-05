@@ -24,6 +24,6 @@
 
 - name: Host Reboot | Wait for host after reboot
   wait_for_connection:
-    delay: 30
+    delay: 65
     timeout: 600
   when: redhat_reboot is changed
