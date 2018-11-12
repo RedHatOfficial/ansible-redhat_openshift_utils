@@ -7,13 +7,13 @@
   import_tasks: tasks/unschedule-and-drain.yml
   delegate_to: "{{ openshift_oc_tools_host }}"
 
-- name: OCP | Stop OpenShift Master Node Services
+- name: OCP | Stop OpenShift Services
   service:
     name: "{{ item }}"
     state: stopped
   loop: "{{ openshift_services }}"
 
-- name: OCP | Start OpenShift Master Node Services
+- name: OCP | Start OpenShift Services
   service:
     name: "{{ item }}"
     state: started
