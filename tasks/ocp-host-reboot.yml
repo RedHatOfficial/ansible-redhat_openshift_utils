@@ -18,4 +18,8 @@
   vars:
     reboot_only_if_needed: False
 
+- name: OCP | Schedule Node
+  command: "oc adm manage-node {{ ansible_fqdn }} --schedulable=true"
+  delegate_to: "{{ openshift_oc_tools_host }}"
+
 - include_tasks: tasks/wait-for-node-ready.yml
