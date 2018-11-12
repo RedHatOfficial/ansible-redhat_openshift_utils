@@ -13,9 +13,10 @@
     state: stopped
   loop: "{{ openshift_services }}"
 
-- name: OCP | Include reboot tasks
-  include_tasks: tasks/reboot.yml
-  vars:
-    reboot_only_if_needed: False
+- name: OCP | Start OpenShift Master Node Services
+  service:
+    name: "{{ item }}"
+    state: started
+  loop: "{{ openshift_services }}"
 
 - include_tasks: tasks/wait-for-node-ready.yml

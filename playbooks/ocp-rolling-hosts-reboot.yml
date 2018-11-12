@@ -12,7 +12,7 @@
   gather_facts: False
   serial: 1
   tasks:
-  - name: OCP | Reboot Master Nodes | Determine services
+  - name: OCP | Rolling Reboot Hosts | Masters | Determine services
     set_fact:
       openshift_services:
       - atomic-openshift-node
@@ -30,7 +30,7 @@
   gather_facts: False
   serial: 1
   tasks:
-  - name: OCP | Reboot Infra Nodes | Determine services
+  - name: OCP | Rolling Reboot Hosts | Infra Nodes | Determine services
     set_fact:
       openshift_services:
       - atomic-openshift-node
@@ -45,7 +45,7 @@
   gather_facts: False
   serial: 1
   tasks:
-  - name: OCP | Reboot App Nodes | Determine services
+  - name: OCP | Rolling Reboot Hosts | App Nodes | Determine services
     set_fact:
       openshift_services:
       - atomic-openshift-node
