@@ -8,6 +8,9 @@ ocp_deployment_version: 3.11
 # Docker Storage Drive
 ocp_docker_storage: "/dev/sdb"
 
+# Docker version
+expected_docker_version: 1.13.1
+
 # Repos
 ocp_repositories:
  "3.10":

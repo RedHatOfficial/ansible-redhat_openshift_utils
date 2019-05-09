@@ -11,11 +11,8 @@
     - name: Enable Required repos
       command: "subscription-manager repos --enable {{ ocp_repositories[ocp_deployment_version | string] | join(' --enable ') }}"
 
-      with_items: "{{ ocp_repositories }}"
+      #with_items: "{{ ocp_repositories }}"
 
-- name: OCP | Installing Base Packages
-  hosts: all
-  tasks:
     - name: Install base packages
       package:
         name: "{{ item }}"
@@ -29,9 +26,6 @@
 
     - include_tasks: tasks/reboot.yml
 
-- name: OCP | Installing and Configuring docker
-  hosts: nodes
-  tasks:
     - name: Install docker
       package:
         name: docker
@@ -53,8 +47,8 @@
       copy:
         dest: /etc/sysconfig/docker-storage-setup
         content: |
-                 DEVS="{{ docker_device | default('{{ ocp_docker_storage }}') }}"
-                 VG=docker-vg
+          DEVS="{{ docker_device | default(lookup('vars', 'ocp_docker_storage')) }}" 
+          VG=docker-vg
 
     - name: Docker storage setup
       command: docker-storage-setup
@@ -67,6 +61,7 @@
 
 - name: OCP | Install OpenShift Ansible packages on installer
   hosts: localhost
+  become: yes
   tasks:
     - name: Install OpenShift Ansible packages
       package:
@@ -74,3 +69,4 @@
         state: latest
       tags:
         installer-prep
+      when: ansible_facts['distribution'] == "RedHat"
