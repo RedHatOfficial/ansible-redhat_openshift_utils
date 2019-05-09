@@ -5,6 +5,9 @@
 # version should be double! Not string!
 ocp_deployment_version: 3.11
 
+# Docker Storage Drive
+ocp_docker_storage: "/dev/sdb"
+
 # Repos
 ocp_repositories:
  "3.10":
@@ -31,4 +34,3 @@ ocp_deployment_extra_packages:
   - "kexec-tools"
   - "sos"
   - "psacct"
-

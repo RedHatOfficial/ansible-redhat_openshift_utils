@@ -16,43 +16,14 @@
       package:
         name: "{{ item }}"
         state: latest
-      with_items:
-        - wget
-        - git
-        - net-tools
-        - bind-utils
-        - iptables-services
-        - bridge-utils
-        - bash-completion
-        - kexec-tools
-        - sos
-        - psacct
+      with_items: "{{
+        ocp_deployment_packages
+        }}"
 
     - name: Update all packages
       package:
         name: "*"
         state: latest
-
-    - name: Install OCP utils
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - atomic-openshift-utils
-
-    - name: Install OCP excluder
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - atomic-openshift-excluder
-        - atomic-openshift-docker-excluder
- 
-    - name: OCP unexclude
-      command: "{{ item }} unexclude"
-      with_items:
-        - atomic-openshift-excluder
-        - atomic-openshift-docker-excluder
 
     - include_tasks: tasks/reboot.yml
 
@@ -80,7 +51,7 @@
       copy:
         dest: /etc/sysconfig/docker-storage-setup
         content: |
-                 DEVS={{ docker_device | default('/dev/vdc') }}
+                 DEVS="{{ docker_device | default('{{ ocp_docker_storage }}') }}"
                  VG=docker-vg
 
     - name: Docker storage setup
