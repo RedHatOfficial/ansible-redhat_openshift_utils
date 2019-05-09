@@ -16,6 +16,20 @@ Performs a rolling (one host at a time) operating system (OS) update and/or upgr
 * infra-nodes
 * app-nodes
 
+#### Default Vars (defaults/main.yml)
+* ocp_deployment_version: <ocp version>
+* ocp_docker_storage: <device to use for docker storage>
+* expected_docker_version: <1.13.1 if using OCP 3.11>
+* ocp_repositories: <which repos to enable>
+* ocp_deployment_packages: <required packages for OCP>
+
+### ocp-install-preparation.yml
+Performs the steps should be before [Installing OpenShift](https://docs.openshift.com/container-platform/3.11/install/host_preparation.html)
+
+```
+ansible-playbook ocp-install-preparation.yml
+```
+
 ### ocp-upgrade-preparation.yml
 Performs the steps should be preforemd before [Performing Automated In-place Cluster Upgrades](https://docs.openshift.com/container-platform/latest/install_config/upgrading/automated_upgrades.html). Specifically before running the appropriate upgrade playbook in the [openshift-ansible](https://github.com/openshift/openshift-ansible/) project.
 
