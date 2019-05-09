@@ -15,14 +15,14 @@ ocp_repositories:
     - "rhel-7-server-extras-rpms"
     - "rhel-7-server-ose-3.10-rpms"
     - "rhel-7-server-ansible-2.4-rpms"
-  "3.11":
+ "3.11":
     - "rhel-7-server-rpms"
     - "rhel-7-server-extras-rpms"
     - "rhel-7-server-ose-3.11-rpms"
     - "rhel-7-server-ansible-2.6-rpms"
 
 # Packages
-ocp_deployment_extra_packages:
+ocp_deployment_packages:
   - "wget"
   - "git"
   - "net-tools"

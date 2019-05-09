@@ -1,12 +1,16 @@
 ---
 - name: OCP | Host Registration
   hosts: all
+  become: yes
+  vars_files:
+    - '../defaults/main.yml'
   tasks:
     - name: Disable all repos
-      command: "subscription-manager repos --disable='*'"
+      command: "subscription-manager repos --disable '*'"
 
     - name: Enable Required repos
-      command: "subscription-manager repos --enable='{{ item }}'"
+      command: "subscription-manager repos --enable {{ ocp_repositories[ocp_deployment_version | string] | join(' --enable ') }}"
+
       with_items: "{{ ocp_repositories }}"
 
 - name: OCP | Installing Base Packages
@@ -16,9 +20,7 @@
       package:
         name: "{{ item }}"
         state: latest
-      with_items: "{{
-        ocp_deployment_packages
-        }}"
+      with_items: "{{ ocp_deployment_packages }}"
 
     - name: Update all packages
       package:
