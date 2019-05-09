@@ -1,0 +1,34 @@
+---
+# vars file for openshift utils
+#
+# main:
+# version should be double! Not string!
+ocp_deployment_version: 3.11
+
+# Repos
+ocp_repositories:
+ "3.10":
+    - "rhel-7-server-rpms"
+    - "rhel-7-server-extras-rpms"
+    - "rhel-7-server-ose-3.10-rpms"
+    - "rhel-7-server-ansible-2.4-rpms"
+  "3.11":
+    - "rhel-7-server-rpms"
+    - "rhel-7-server-extras-rpms"
+    - "rhel-7-server-ose-3.11-rpms"
+    - "rhel-7-server-ansible-2.6-rpms"
+
+# Packages
+ocp_deployment_extra_packages:
+  - "wget"
+  - "git"
+  - "net-tools"
+  - "bind-utils"
+  - "yum-utils"
+  - "iptables-services"
+  - "bridge-utils"
+  - "bash-completion"
+  - "kexec-tools"
+  - "sos"
+  - "psacct"
+
