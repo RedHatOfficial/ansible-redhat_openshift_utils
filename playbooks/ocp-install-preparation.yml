@@ -13,12 +13,6 @@
         installer-prep
       when: ansible_facts['distribution'] == "RedHat"
 
-    - name: Grab inventory file
-      get_url:
-        url: {{ocp_inventory}}
-        dest: /tmp/ocp_inventory.ini
-        force: yes
-
 - name: OCP | Host Registration
   hosts: all
   become: yes

@@ -2,10 +2,6 @@
 # vars file for openshift utils
 #
 # main:
-
-#url for the inventory file to be used
-ocp_inventory: http://example.com/inventory.ini
-
 # version should be double! Not string!
 ocp_deployment_version: 3.11
 
