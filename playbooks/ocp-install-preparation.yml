@@ -1,64 +1,48 @@
 ---
+- name: OCP | Install OpenShift Ansible packages on installer
+  hosts: localhost
+  vars_files:
+    - '../defaults/main.yml'
+  become: yes
+  tasks:
+    - name: Install OpenShift Ansible packages
+      package:
+        name: "openshift-ansible*"
+        state: latest
+      tags:
+        installer-prep
+      when: ansible_facts['distribution'] == "RedHat"
+
 - name: OCP | Host Registration
   hosts: all
+  become: yes
+  vars_files:
+    - '../defaults/main.yml'
   tasks:
     - name: Disable all repos
-      command: "subscription-manager repos --disable='*'"
+      rhsm_repository:
+        name: '*'
+        state: disabled
 
     - name: Enable Required repos
-      command: "subscription-manager repos --enable='{{ item }}'"
-      with_items: "{{ ocp_repositories }}"
+      rhsm_repository:
+        name: "{{ item }}"
+        state: enabled
+      with_items: "{{ ocp_repositories[ocp_deployment_version | string]  }}"
 
-- name: OCP | Installing Base Packages
-  hosts: all
-  tasks:
     - name: Install base packages
       package:
         name: "{{ item }}"
         state: latest
-      with_items:
-        - wget
-        - git
-        - net-tools
-        - bind-utils
-        - iptables-services
-        - bridge-utils
-        - bash-completion
-        - kexec-tools
-        - sos
-        - psacct
+      with_items: "{{ ocp_deployment_packages }}"
 
     - name: Update all packages
       package:
         name: "*"
         state: latest
 
-    - name: Install OCP utils
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - atomic-openshift-utils
-
-    - name: Install OCP excluder
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - atomic-openshift-excluder
-        - atomic-openshift-docker-excluder
- 
-    - name: OCP unexclude
-      command: "{{ item }} unexclude"
-      with_items:
-        - atomic-openshift-excluder
-        - atomic-openshift-docker-excluder
-
     - include_tasks: tasks/reboot.yml
 
-- name: OCP | Installing and Configuring docker
-  hosts: nodes
-  tasks:
     - name: Install docker
       package:
         name: docker
@@ -80,8 +64,8 @@
       copy:
         dest: /etc/sysconfig/docker-storage-setup
         content: |
-                 DEVS={{ docker_device | default('/dev/vdc') }}
-                 VG=docker-vg
+          DEVS="{{ docker_device | default(lookup('vars', 'ocp_docker_storage')) }}"
+          VG=docker-vg
 
     - name: Docker storage setup
       command: docker-storage-setup
@@ -91,13 +75,3 @@
         name: docker
         state: started
         enabled: yes
-
-- name: OCP | Install OpenShift Ansible packages on installer
-  hosts: localhost
-  tasks:
-    - name: Install OpenShift Ansible packages
-      package:
-        name: "openshift-ansible*"
-        state: latest
-      tags:
-        installer-prep
