@@ -20,12 +20,15 @@
     - '../defaults/main.yml'
   tasks:
     - name: Disable all repos
-      command: "subscription-manager repos --disable '*'"
+      rhsm_repository:
+        name: '*'
+        state: disabled
 
     - name: Enable Required repos
-      command: "subscription-manager repos --enable {{ ocp_repositories[ocp_deployment_version | string] | join(' --enable ') }}"
-
-      #with_items: "{{ ocp_repositories }}"
+      rhsm_repository:
+        name: "{{ item }}"
+        state: enabled
+      with_items: "{{ ocp_repositories[ocp_deployment_version | string]  }}"
 
     - name: Install base packages
       package:
