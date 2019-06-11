@@ -6,7 +6,7 @@
 ocp_deployment_version: 3.11
 
 # Docker Storage Drive
-ocp_docker_storage: "/dev/sdb"
+ocp_docker_storage: "sdb"
 
 # Docker version
 expected_docker_version: 1.13.1
