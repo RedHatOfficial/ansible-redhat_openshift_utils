@@ -28,5 +28,5 @@ rfc2307:
         scope: sub
         derefAliases: never
     userUIDAttribute: dn
-    userNameAttributes: [ uid ]
+    userNameAttributes: [ {{ user_name_attribute | default(uid) }} ]
 
