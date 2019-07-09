@@ -28,5 +28,5 @@ rfc2307:
         scope: sub
         derefAliases: never
     userUIDAttribute: dn
-    userNameAttributes: [ {{ user_name_attribute | default(uid) }} ]
+    userNameAttributes: [ {{ ocp_ldap_user_name_attribute | default(uid) }} ]
 
