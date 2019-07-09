@@ -1,0 +1,6 @@
+---
+- name: OCP | Verify Glusterfs Cluster Health
+  hosts: masters[0]
+  tasks:
+  - include_role:
+      name: openshift_storage_glusterfs_cluster_health
