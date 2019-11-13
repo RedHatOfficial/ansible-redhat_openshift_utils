@@ -8,6 +8,9 @@ ocp_deployment_version: 3.11
 # Docker Storage Drive
 ocp_docker_storage: "sdb"
 
+# Docker Storage Driver (default)
+docker_storage_driver: "overlay2"
+
 # Docker version
 expected_docker_version: 1.13.1
 
