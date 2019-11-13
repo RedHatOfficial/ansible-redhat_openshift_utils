@@ -64,6 +64,7 @@
       copy:
         dest: /etc/sysconfig/docker-storage-setup
         content: |
+          STORAGE_DRIVER="{{ docker_storage_driver | default('overlay2') }}"
           DEVS="{{ docker_device | default(lookup('vars', 'ocp_docker_storage')) }}"
           VG=docker-vg
 
