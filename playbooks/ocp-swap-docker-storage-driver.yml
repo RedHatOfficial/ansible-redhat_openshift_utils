@@ -1,0 +1,92 @@
+- name: OCP | Swap docker Storage Driver
+  hosts: all
+  gather_facts: True
+  serial: 1
+  vars:
+    ocp_node_services:
+    - atomic-openshift-node
+    - docker
+  tasks:
+  - name: OCP | Swap docker Storage Driver | Set ocp_docker_storage_driver
+    set_fact:
+      ocp_docker_storage_driver: "overlay2"
+    when: ocp_docker_storage_driver is undefined
+
+  - name: OCP | Swap docker Storage Driver | Set ocp_oc_tools_host
+    set_fact:
+      ocp_oc_tools_host: "{{ groups['masters'][0] }}"
+    when: ocp_oc_tools_host is undefined
+
+  - name: OCP | Swap docker Storage Driver | Configure STORAGE_DRIVER
+    lineinfile:
+      path: /etc/sysconfig/docker-storage-setup
+      regexp: '^STORAGE_DRIVER='
+      line: "STORAGE_DRIVER={{ ocp_docker_storage_driver }}"
+    register: ocp_configure_docker_storage_driver
+
+  - name: OCP | Swap docker Storage Driver | Perform swap
+    block:
+    - name: OCP | Swap docker Storage Driver | Configure WIPE_SIGNATURES
+      lineinfile:
+        path: /etc/sysconfig/docker-storage-setup
+        regexp: '^WIPE_SIGNATURES='
+        line: "WIPE_SIGNATURES=true"
+
+    - name: OCP | Swap docker Storage Driver | Cordon node
+      command: "oc adm cordon {{ ansible_fqdn }}"
+      delegate_to: "{{ ocp_oc_tools_host }}"
+    
+    - name: OCP | Swap docker Storage Driver | Drain node
+      command: "oc adm drain {{ ansible_fqdn }} --force --ignore-daemonsets --delete-local-data"
+      delegate_to: "{{ ocp_oc_tools_host }}"
+    
+    - name: OCP | Swap docker Storage Driver | Stop services
+      service:
+         name: "{{ item }}"
+         state: stopped
+         enabled: no
+      loop: "{{ ocp_node_services }}"
+    
+    - name: OCP | Swap docker Storage Driver | Umount docker/containers
+      mount:
+        path: /var/lib/docker/containers
+        state: unmounted
+
+    - name: OCP | Swap docker Storage Driver | Reboot
+      reboot:
+    
+    - name: OCP | Swap docker Storage Driver | Delete docker directories
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+      - /var/lib/docker
+      - /etc/sysconfig/docker-storage
+    
+    - name: OCP | Swap docker Storage Driver | Remove logical volume
+      lvol:
+        vg: docker-vg
+        lv: docker-pool
+        state: absent
+        force: yes
+    
+    - name: OCP | Swap docker Storage Driver | Remove logical volume group
+      lvg:
+        vg: docker-vg
+        state: absent
+        force: yes
+    
+    - name: OCP | Swap docker Storage Driver | run docker-storage-setup
+      command: "docker-storage-setup"
+    
+    - name: OCP | Swap docker Storage Driver | Start services
+      service:
+         name: "{{ item }}"
+         state: started
+         enabled: yes
+      loop: "{{ ocp_node_services }}"
+
+    - name: OCP | Swap docker Storage Driver | Uncordon node
+      command: "oc adm uncordon {{ ansible_fqdn }}"
+      delegate_to: "{{ ocp_oc_tools_host }}"
+    when: ocp_configure_docker_storage_driver.changed
