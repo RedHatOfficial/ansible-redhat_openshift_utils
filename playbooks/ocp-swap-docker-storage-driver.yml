@@ -12,10 +12,13 @@
       ocp_docker_storage_driver: "overlay2"
     when: ocp_docker_storage_driver is undefined
 
-  - name: OCP | Swap docker Storage Driver | Set ocp_oc_tools_host
+  - name: OCP | Swap docker Storage Driver | Set openshift_oc_tools_host
     set_fact:
-      ocp_oc_tools_host: "{{ groups['masters'][0] }}"
-    when: ocp_oc_tools_host is undefined
+      openshift_oc_tools_host: "{{ groups['masters'][0] }}"
+    when: openshift_oc_tools_host is undefined
+
+  - name: OCP | Swap docker Storage Driver | Wait for node ready before update
+    include_tasks: tasks/wait-for-node-ready.yml
 
   - name: OCP | Swap docker Storage Driver | Configure STORAGE_DRIVER
     lineinfile:
@@ -34,11 +37,11 @@
 
     - name: OCP | Swap docker Storage Driver | Cordon node
       command: "oc adm cordon {{ ansible_fqdn }}"
-      delegate_to: "{{ ocp_oc_tools_host }}"
+      delegate_to: "{{ openshift_oc_tools_host }}"
     
     - name: OCP | Swap docker Storage Driver | Drain node
       command: "oc adm drain {{ ansible_fqdn }} --force --ignore-daemonsets --delete-local-data"
-      delegate_to: "{{ ocp_oc_tools_host }}"
+      delegate_to: "{{ openshift_oc_tools_host }}"
     
     - name: OCP | Swap docker Storage Driver | Stop services
       service:
@@ -88,5 +91,8 @@
 
     - name: OCP | Swap docker Storage Driver | Uncordon node
       command: "oc adm uncordon {{ ansible_fqdn }}"
-      delegate_to: "{{ ocp_oc_tools_host }}"
+      delegate_to: "{{ openshift_oc_tools_host }}"
+
+    - name: OCP | Swap docker Storage Driver | Wait for node ready after update
+      include_tasks: tasks/wait-for-node-ready.yml
     when: ocp_configure_docker_storage_driver.changed
