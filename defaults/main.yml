@@ -23,7 +23,7 @@ ocp_repositories:
     - "rhel-7-server-extras-rpms"
     - "rhel-7-server-ose-3.11-rpms"
     - "rhel-7-server-ansible-2.6-rpms"
-
+    - "rhel-7-server-ansible-2.8-rpms"
 # Packages
 ocp_deployment_packages:
   - "wget"

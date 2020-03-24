@@ -18,21 +18,11 @@
   gather_facts: False
   serial: 1
   tasks:
-  - name: OCP | OS Update and Upgrade | Masters | Determine services
-    set_fact:
-      openshift_services:
-      - atomic-openshift-node
-      - docker
-      - atomic-openshift-master-api
-      - atomic-openshift-master-controllers
-      - etcd
-    when: openshift_services is not defined
-
   - name: OCP | OS Update and Upgrade | Masters | Include Tasks
     include_tasks: tasks/os-update-and-upgrade.yml
 
 - name: OCP | OS Update and Upgrade | Infra Nodes
-  hosts: infra-nodes
+  hosts: infra_hosts
   gather_facts: False
   serial: 1
   tasks:
@@ -47,7 +37,7 @@
     include_tasks: tasks/os-update-and-upgrade.yml
 
 - name: OCP | OS Update and Upgrade | App Nodes
-  hosts: app-nodes
+  hosts: app_hosts
   gather_facts: False
   serial: 1
   tasks:

@@ -1,0 +1,44 @@
+---
+- block:
+  - name: OCP | Update OS | Validate Variables
+    assert:
+      that:
+      - "openshift_services is defined"
+      - "openshift_oc_tools_host is defined"
+
+  - include_role:
+      name: openshift_storage_glusterfs_cluster_health
+
+  - name: OCP | Update OS | Include Tasks for Unschedule and Drain
+    import_tasks: tasks/unschedule-and-drain.yml
+    delegate_to: "{{ openshift_oc_tools_host }}"
+    
+  - name: OCP | Update OS | Stop Services
+    service:
+      name: "{{ item }}"
+      state: stopped
+    with_items: "{{ openshift_services }}"
+    
+  - name: OCP | Update OS | Update Packages
+    package:
+      name: '*'
+      state: latest
+    
+  - name: OCP | Update OS | Include Tasks for Host Reboot
+    include_tasks: tasks/reboot.yml
+    vars:
+      reboot_only_if_needed: True
+
+  - name: OCP | Update OS | Start Services
+    service:
+      name: "{{ item }}"
+      state: started
+    with_items: "{{ openshift_services }}"
+    
+  - name: OCP | Update OS | Schedule Node
+    command: "oc adm manage-node {{ ansible_fqdn }} --schedulable=true"
+    delegate_to: "{{ openshift_oc_tools_host }}"
+
+  - include_tasks: wait-for-node-ready.yml
+  when: 
+    - packages_need_update_result is changed
