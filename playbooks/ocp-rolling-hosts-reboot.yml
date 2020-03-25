@@ -12,16 +12,6 @@
   gather_facts: False
   serial: 1
   tasks:
-  - name: OCP | Rolling Reboot Hosts | Masters | Determine services
-    set_fact:
-      openshift_services:
-      - atomic-openshift-node
-      - docker
-      - atomic-openshift-master-api
-      - atomic-openshift-master-controllers
-      - etcd
-    when: openshift_services is not defined
-
   - name: OCP | Rolling Reboot Hosts | Masters | Include Tasks
     include_tasks: tasks/ocp-host-reboot.yml
 
@@ -36,7 +26,7 @@
       - atomic-openshift-node
       - docker
     when: openshift_services is not defined
-
+    
   - name: OCP | Rolling Reboot Hosts | Infra Nodes | Include Tasks
     include_tasks: tasks/ocp-host-reboot.yml
 
