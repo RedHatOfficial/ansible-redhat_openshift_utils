@@ -34,6 +34,7 @@
         - atomic-openshift-master-api
         - atomic-openshift-master-controllers
         - etcd
+      when: ocp_deployment_version == 3.9
 
 - name: OCP | Reboot Master Nodes Hosts
   hosts: masters
