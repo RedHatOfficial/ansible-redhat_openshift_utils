@@ -12,12 +12,18 @@
     name: "{{ item }}"
     state: stopped
   loop: "{{ openshift_services }}"
+  when: openshift_services is defined
+
+- name: OCP | Update OS | Restart Master API and Controllers
+  include_tasks: tasks/restart_master_services.yml
+  when: inventory_hostname in groups['masters']
 
 - name: OCP | Start OpenShift Services
   service:
     name: "{{ item }}"
     state: started
   loop: "{{ openshift_services }}"
+  when: openshift_services is defined
 
 - name: OCP | Schedule Node
   command: "oc adm manage-node {{ ansible_fqdn }} --schedulable=true"
