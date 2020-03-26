@@ -1,18 +1,18 @@
 ---
 # for master nodes wait for the master API port to be ready
 - block:
-  - name: OCP | Wait for Node Ready | Determine master API port
+  - name: OCP | Wait for Master Ready | Determine master API port
     set_fact:
       openshift_master_api_port: 443
     when: openshift_master_api_port is not defined
 
-  - name: OCP | Wait for Node Ready | Wait for master API to come back online
+  - name: OCP | Wait for Master Ready | Wait for master API to come back online
     wait_for:
       state: started
       delay: 10
       port: "{{ openshift_master_api_port }}"
       timeout: 600
-  when: inventory_hostname in groups['masters']
+    when: inventory_hostname in groups['masters']
 
 # @source https://github.com/openshift/openshift-ansible/blob/release-3.10/playbooks/openshift-node/private/restart.yml#L35-L54
 - name: OCP | Wait for Node Ready | Wait for node to be ready
@@ -34,6 +34,7 @@
   # Give the node three minutes to come back online.
   retries: 36
   delay: 5
+  when: inventory_hostname not in groups['masters']
   
 # ensure gluster is ready
 - include_role:
