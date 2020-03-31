@@ -26,7 +26,7 @@
       - atomic-openshift-node
       - docker
     when: openshift_services is not defined
-    
+
   - name: OCP | Rolling Reboot Hosts | Infra Nodes | Include Tasks
     include_tasks: tasks/ocp-host-reboot.yml
 
