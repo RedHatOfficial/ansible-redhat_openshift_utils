@@ -21,23 +21,6 @@
         - atomic-openshift-node
         - docker
 
-- name: OCP | Stop Master Nodes Services
-  hosts: masters
-  vars_files:
-    - '../defaults/main.yml'
-  tasks:
-    - name: Stop OpenShift Master Node Services
-      service:
-        name: "{{ item }}"
-        state: stopped
-      loop:
-        - atomic-openshift-node
-        - docker
-        - atomic-openshift-master-api
-        - atomic-openshift-master-controllers
-        - etcd
-      when: ocp_deployment_version == "3.9"
-
 - name: OCP | Reboot Master Nodes Hosts
   hosts: masters
   tasks:
