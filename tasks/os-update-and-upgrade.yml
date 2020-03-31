@@ -12,8 +12,12 @@
 
 - name: OCP | Update OS | Include Tasks for Masters
   include_tasks: tasks/os-update-and-upgrade/masters.yml
-  when: inventory_hostname in groups['masters']
+  when: 
+    - inventory_hostname in groups['masters']
+    - packages_need_update_result is changed
 
 - name: OCP | Update OS | Include Tasks for Nodes
   include_tasks: tasks/os-update-and-upgrade/nodes.yml
-  when: inventory_hostname not in groups['masters']
+  when: 
+    - inventory_hostname not in groups['masters']
+    - packages_need_update_result is changed

@@ -1,38 +1,37 @@
 ---
-- block:
-  - name: OCP | Update OS | Validate Variables
-    assert:
-      that:
+- name: OCP | Update OS | Validate Variables
+  assert:
+    that:
       - "openshift_oc_tools_host is defined"
 
-  - include_role:
-      name: openshift_storage_glusterfs_cluster_health
+- include_role:
+    name: openshift_storage_glusterfs_cluster_health
 
-  - name: OCP | Update OS | Include Tasks for Unschedule and Drain
-    import_tasks: tasks/unschedule-and-drain.yml
-    delegate_to: "{{ openshift_oc_tools_host }}"
+- name: OCP | Update OS | Include Tasks for Unschedule and Drain
+  import_tasks: tasks/unschedule-and-drain.yml
+  delegate_to: "{{ openshift_oc_tools_host }}"
 
-  - name: OCP | Update OS | Update Packages
-    package:
-      name: '*'
-      state: latest
+- name: OCP | Update OS | Update Packages
+  package:
+    name: '*'
+    state: latest
 
-  - name: OCP | Update OS | Include Tasks for Host Reboot
-    include_tasks: tasks/reboot.yml
-    vars:
-      reboot_only_if_needed: True
+- name: OCP | Update OS | Include Tasks for Host Reboot
+  include_tasks: tasks/reboot.yml
+  vars:
+    reboot_only_if_needed: True
 
 # Restart Master services only when reboot is not required
-  - name: OCP | Update OS | Restart Master API and Controllers
-    include_tasks: tasks/restart_master_services.yml
-    when:
-      - redhat_reboot is not changed
+- name: OCP | Update OS | Restart Master API and Controllers
+  include_tasks: tasks/restart_master_services.yml
+  when:
+    - redhat_reboot is not changed
 
-  - name: OCP | Update OS | Schedule Node
-    command: "oc adm uncordon {{ ansible_fqdn }}"
-    delegate_to: "{{ openshift_oc_tools_host }}"
+- name: OCP | Update OS | Schedule Node
+  command: "oc adm uncordon {{ ansible_fqdn }}"
+  delegate_to: "{{ openshift_oc_tools_host }}"
 
-  - include_tasks: wait-for-node-ready.yml
+- include_tasks: wait-for-node-ready.yml
   when:
     - packages_need_update_result is changed
 
