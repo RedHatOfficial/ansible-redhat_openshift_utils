@@ -13,7 +13,7 @@
   serial: 1
   tasks:
   - name: OCP | Rolling Restart Services | Masters | Include Tasks
-    include_tasks: tasks/ocp-services-reboot.yml
+    include_tasks: tasks/ocp-services-reboot/masters.yml
 
 - name: OCP | Rolling Restart Services | Infra Nodes
   hosts: infra-nodes
@@ -28,7 +28,7 @@
     when: openshift_services is not defined
 
   - name: OCP | Rolling Restart Services | Infra Nodes | Include Tasks
-    include_tasks: tasks/ocp-services-reboot.yml
+    include_tasks: tasks/ocp-services-reboot/nodes.yml
 
 - name: OCP | Rolling Restart Services | App Nodes
   hosts: app-nodes
@@ -43,4 +43,4 @@
     when: openshift_services is not defined
 
   - name: OCP | Rolling Restart Services | App Nodes | Include Tasks
-    include_tasks: tasks/ocp-services-reboot.yml
+    include_tasks: tasks/ocp-services-reboot/nodes.yml
