@@ -22,6 +22,7 @@
     vars:
       reboot_only_if_needed: True
 
+# Restart Master services only when reboot is not required
   - name: OCP | Update OS | Restart Master API and Controllers
     include_tasks: tasks/restart_master_services.yml
     when:
