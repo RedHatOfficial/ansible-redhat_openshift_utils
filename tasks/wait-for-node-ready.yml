@@ -12,7 +12,7 @@
       delay: 10
       port: "{{ openshift_master_api_port }}"
       timeout: 600
-    when: inventory_hostname in groups['masters']
+when: inventory_hostname in groups['masters']
 
 # @source https://github.com/openshift/openshift-ansible/blob/release-3.10/playbooks/openshift-node/private/restart.yml#L35-L54
 - name: OCP | Wait for Node Ready | Wait for node to be ready
