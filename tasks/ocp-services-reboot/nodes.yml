@@ -1,0 +1,28 @@
+---
+# ensure gluster is healthy before stopping another node
+- include_role:
+    name: openshift_storage_glusterfs_cluster_health
+
+- name: OCP | Include Tasks for Unschedule and Drain
+  import_tasks: tasks/unschedule-and-drain.yml
+  delegate_to: "{{ openshift_oc_tools_host }}"
+
+- name: OCP | Stop OpenShift Services
+  service:
+    name: "{{ item }}"
+    state: stopped
+  loop: "{{ openshift_services }}"
+  when: openshift_services is defined
+
+- name: OCP | Start OpenShift Services
+  service:
+    name: "{{ item }}"
+    state: started
+  loop: "{{ openshift_services }}"
+  when: openshift_services is defined
+
+- name: OCP | Schedule Node
+  command: "oc adm uncordon {{ ansible_fqdn }}"
+  delegate_to: "{{ openshift_oc_tools_host }}"
+
+- include_tasks: tasks/wait-for-node-ready.yml
