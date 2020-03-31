@@ -11,9 +11,9 @@
   failed_when: packages_need_update_result.rc != 0 and packages_need_update_result.rc != 100
 
 - name: OCP | Update OS | Include Tasks for Masters
-  include_tasks: tasks/masters-os-update-and-upgrade.yml
+  include_tasks: tasks/os-update-and-upgrade/masters.yml
   when: inventory_hostname in groups['masters']
 
 - name: OCP | Update OS | Include Tasks for Nodes
-  include_tasks: tasks/nodes-os-update-and-upgrade.yml
+  include_tasks: tasks/os-update-and-upgrade/nodes.yml
   when: inventory_hostname not in groups['masters']
