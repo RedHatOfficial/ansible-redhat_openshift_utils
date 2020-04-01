@@ -27,11 +27,10 @@
   when:
     - redhat_reboot is not changed
 
+- include_tasks: tasks/wait-for-node-ready.yml
+  when: packages_need_update_result is changed
+
 - name: OCP | Update OS | Schedule Node
   command: "oc adm uncordon {{ ansible_fqdn }}"
   delegate_to: "{{ openshift_oc_tools_host }}"
-
-- include_tasks: wait-for-node-ready.yml
-  when:
-    - packages_need_update_result is changed
 
