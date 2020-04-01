@@ -33,11 +33,10 @@
     name: "{{ item }}"
     state: started
   with_items: "{{ openshift_services }}"
-    
+
+- include_tasks: tasks/wait-for-node-ready.yml
+  when: packages_need_update_result is changed
+
 - name: OCP | Update OS | Schedule Node
   command: "oc adm manage-node {{ ansible_fqdn }} --schedulable=true"
   delegate_to: "{{ openshift_oc_tools_host }}"
-
-- include_tasks: wait-for-node-ready.yml
-when: 
- - packages_need_update_result is changed
