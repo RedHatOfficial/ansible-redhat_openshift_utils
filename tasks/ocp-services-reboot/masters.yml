@@ -11,8 +11,8 @@
   include_tasks: tasks/restart_master_services.yml
   when: inventory_hostname in groups['masters']
 
+- include_tasks: tasks/wait-for-node-ready.yml
+
 - name: OCP | Schedule Node
   command: "oc adm uncordon {{ ansible_fqdn }}"
   delegate_to: "{{ openshift_oc_tools_host }}"
-
-- include_tasks: tasks/wait-for-node-ready.yml
