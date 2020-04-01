@@ -2,9 +2,9 @@
 Ansible content supplemental to the openshift-ansible project for doing things that don't ship with that project, such as prerequisites for updates, upgrades, restarts, etc.
 
 ## Playbooks
-Playbooks provided by this project.
+Playbooks provided by this project are currently supported in either OCP 3.9 or OCP 3.11. See details for each playbook to determine OCP compatability.
 
-### ocp-rolling-os-update-and-upgrade.yml
+### ocp-rolling-os-update-and-upgrade.yml (OCP 3.11)
 Performs a rolling (one host at a time) operating system (OS) update and/or upgrade to the OCP cluster. This is done as per the instructions at [Operating System Updates and Upgrades](https://docs.openshift.com/container-platform/latest/install_config/upgrading/os_upgrades.html).
 
 #### Assumptions
@@ -23,22 +23,31 @@ Performs a rolling (one host at a time) operating system (OS) update and/or upgr
 * ocp_repositories: <which repos to enable>
 * ocp_deployment_packages: <required packages for OCP>
 
-### ocp-install-preparation.yml
+### ocp-rolling-hosts-reboot.yml (OCP 3.11)
+Performs a rolling (one host at a time) reboot for each node in the OCP cluster.
+
+### ocp-rolling-services-restart.yml (OCP 3.11)
+Performs a rolling (one host at a time) restart of OCP services for each node in the OCP cluster.
+
+### ocp-hosts-reboot.yml (OCP 3.11)
+Performs a blanket reboot for all nodes in the OCP cluster
+
+### ocp-install-preparation.yml (OCP 3.9)
 Performs some prerequisite steps before [Installing OpenShift](https://docs.openshift.com/container-platform/3.11/install/host_preparation.html)
 
 ```
 ansible-playbook ocp-install-preparation.yml
 ```
 
-### ocp-upgrade-preparation.yml
+### ocp-upgrade-preparation.yml (OCP 3.9)
 Executes the steps that should be performed before [Performing Automated In-place Cluster Upgrades](https://docs.openshift.com/container-platform/latest/install_config/upgrading/automated_upgrades.html). Specifically before running the appropriate upgrade playbook in the [openshift-ansible](https://github.com/openshift/openshift-ansible/) project.
 
 This is essentially an ansible version of [Preparing for an Automated Upgrade] (https://docs.openshift.com/container-platform/latest/install_config/upgrading/automated_upgrades.html#preparing-for-an-automated-upgrade).
 
-### ocp-upgrade-cleanup.yml
+### ocp-upgrade-cleanup.yml (OCP 3.9)
 Executes the steps that should be performed after [Performing Automated In-place Cluster Upgrades](https://docs.openshift.com/container-platform/latest/install_config/upgrading/automated_upgrades.html). Specifically after running the appropriate upgrade playbook in the [openshift-ansible](https://github.com/openshift/openshift-ansible/) project.
 
-### ocp-ldap-groups-sync.yml
+### ocp-ldap-groups-sync.yml (OCP 3.9)
 Performs an ldap group sync.
 
 #### Options
