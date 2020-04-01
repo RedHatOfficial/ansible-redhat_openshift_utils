@@ -9,7 +9,6 @@
 
 - name: OCP | Update OS | Restart Master API and Controllers
   include_tasks: tasks/restart_master_services.yml
-  when: inventory_hostname in groups['masters']
 
 - include_tasks: tasks/wait-for-node-ready.yml
 
