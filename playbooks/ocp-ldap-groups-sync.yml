@@ -1,6 +1,6 @@
 ---
 - name: OCP | LDAP Groups Sync
-  hosts: masters[0]
+  hosts: all
   become: true
   vars:
     ocp_ldap_groups_sync_file: '/tmp/ocp_ldap_groups_sync.yml'
