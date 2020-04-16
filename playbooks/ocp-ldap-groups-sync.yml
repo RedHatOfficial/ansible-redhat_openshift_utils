@@ -1,6 +1,6 @@
 ---
 - name: OCP | LDAP Groups Sync
-  hosts: all
+  hosts: "{{ variable_host | default('masters[0]') }}"
   become: true
   vars:
     ocp_ldap_groups_sync_file: '/tmp/ocp_ldap_groups_sync.yml'

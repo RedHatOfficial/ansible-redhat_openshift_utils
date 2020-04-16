@@ -1,6 +1,6 @@
 ---
 - name: OCP | Prune
-  hosts: masters[0]
+  hosts: "{{ variable_host | default('masters[0]') }}"
   tasks:
     - name: OCP | Prune Objects
       command: "oc adm prune {{ item }} --orphans --keep-complete={{ ocp_prune_keep_complete | default(1) }} --keep-failed={{ ocp_prune_keep_failed | default(0) }} --confirm"
