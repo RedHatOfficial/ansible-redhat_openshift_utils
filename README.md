@@ -42,7 +42,7 @@ ansible-playbook ocp-install-preparation.yml
 ### ocp-upgrade-preparation.yml (OCP 3.9)
 Executes the steps that should be performed before [Performing Automated In-place Cluster Upgrades](https://docs.openshift.com/container-platform/latest/install_config/upgrading/automated_upgrades.html). Specifically before running the appropriate upgrade playbook in the [openshift-ansible](https://github.com/openshift/openshift-ansible/) project.
 
-This is essentially an ansible version of [Preparing for an Automated Upgrade] (https://docs.openshift.com/container-platform/latest/install_config/upgrading/automated_upgrades.html#preparing-for-an-automated-upgrade).
+This is essentially an ansible version of [Preparing for an Automated Upgrade](https://docs.openshift.com/container-platform/latest/install_config/upgrading/automated_upgrades.html#preparing-for-an-automated-upgrade).
 
 ### ocp-upgrade-cleanup.yml (OCP 3.9)
 Executes the steps that should be performed after [Performing Automated In-place Cluster Upgrades](https://docs.openshift.com/container-platform/latest/install_config/upgrading/automated_upgrades.html). Specifically after running the appropriate upgrade playbook in the [openshift-ansible](https://github.com/openshift/openshift-ansible/) project.
@@ -54,7 +54,7 @@ Performs an ldap group sync.
 | parameter                            | required | default | choices     | comments
 |--------------------------------------|----------|---------|-------------|---------------------------------------------
 | ocp\_ldap\_server\_fqdn              | yes      |         |             | FQDN of the LDAP server
-| ocp\_ldap\_bind\_dn                  | yes      |         |             | Bind DN to usu
+| ocp\_ldap\_bind\_dn                  | yes      |         |             | Bind DN to use
 | ocp\_ldap\_bind\_password            | yes      |         |             | Bind passwrod assoicated with the `ocp_ldap_bind_dn`
 | ocp\_ldap\_groups\_query\_base\_dn   | yes      |         |             | Base DN for looking for LDAP groups
 | ocp\_ldap\_users\_query\_base\_dn    | yes      |         |             | Base DN for looking for LDAP users
