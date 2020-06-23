@@ -36,11 +36,11 @@
         line: "WIPE_SIGNATURES=true"
 
     - name: OCP | Swap docker Storage Driver | Cordon node
-      command: "oc adm cordon {{ ansible_fqdn }}"
+      command: "oc adm cordon {{ inventory_hostname }}"
       delegate_to: "{{ openshift_oc_tools_host }}"
     
     - name: OCP | Swap docker Storage Driver | Drain node
-      command: "oc adm drain {{ ansible_fqdn }} --force --ignore-daemonsets --delete-local-data"
+      command: "oc adm drain {{ inventory_hostname }} --force --ignore-daemonsets --delete-local-data"
       delegate_to: "{{ openshift_oc_tools_host }}"
     
     - name: OCP | Swap docker Storage Driver | Stop services
@@ -90,7 +90,7 @@
       loop: "{{ ocp_node_services }}"
 
     - name: OCP | Swap docker Storage Driver | Uncordon node
-      command: "oc adm uncordon {{ ansible_fqdn }}"
+      command: "oc adm uncordon {{ inventory_hostname }}"
       delegate_to: "{{ openshift_oc_tools_host }}"
 
     - name: OCP | Swap docker Storage Driver | Wait for node ready after update

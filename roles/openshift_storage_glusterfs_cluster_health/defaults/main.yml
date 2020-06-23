@@ -1,7 +1,7 @@
 ---
 openshift_client_binary: "oc"
 openshift_config_base: "/etc/origin"
-openshift_node_name: "{{ ansible_fqdn }}"
+openshift_node_name: "{{ inventory_hostname }}"
 
 # @source https://github.com/openshift/openshift-ansible/blob/release-3.10/roles/openshift_storage_glusterfs/tasks/glusterfs_registry_facts.yml
 openshift_storage_glusterfs_namespace: 'glusterfs'
