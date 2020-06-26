@@ -13,8 +13,8 @@ Performs a rolling (one host at a time) operating system (OS) update and/or upgr
 
 #### Required groups
 * masters
-* infra-nodes
-* app-nodes
+* infra_nodes
+* app_nodes
 
 #### Default Vars (defaults/main.yml)
 * ocp_deployment_version: <ocp version>
