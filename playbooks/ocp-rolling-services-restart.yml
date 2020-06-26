@@ -16,7 +16,7 @@
     include_tasks: tasks/ocp-services-reboot/masters.yml
 
 - name: OCP | Rolling Restart Services | Infra Nodes
-  hosts: infra-nodes
+  hosts: infra_nodes
   gather_facts: False
   serial: 1
   tasks:
@@ -31,7 +31,7 @@
     include_tasks: tasks/ocp-services-reboot/nodes.yml
 
 - name: OCP | Rolling Restart Services | App Nodes
-  hosts: app-nodes
+  hosts: app_nodes
   gather_facts: False
   serial: 1
   tasks:

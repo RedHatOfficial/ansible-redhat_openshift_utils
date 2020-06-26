@@ -31,6 +31,6 @@
   when: packages_need_update_result is changed
 
 - name: OCP | Update OS | Schedule Node
-  command: "oc adm uncordon {{ ansible_fqdn }}"
+  command: "oc adm uncordon {{ inventory_hostname }}"
   delegate_to: "{{ openshift_oc_tools_host }}"
 

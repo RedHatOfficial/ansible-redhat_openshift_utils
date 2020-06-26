@@ -24,5 +24,5 @@
 - include_tasks: tasks/wait-for-node-ready.yml
 
 - name: OCP | Schedule Node
-  command: "oc adm uncordon {{ ansible_fqdn }}"
+  command: "oc adm uncordon {{ inventory_hostname }}"
   delegate_to: "{{ openshift_oc_tools_host }}"

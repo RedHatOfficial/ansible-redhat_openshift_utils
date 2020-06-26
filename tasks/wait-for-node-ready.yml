@@ -19,7 +19,7 @@
   oc_obj:
     state: list
     kind: node
-    name: "{{ ansible_fqdn | lower }}"
+    name: "{{ inventory_hostname }}"
   register: node_output
   delegate_to: "{{ openshift_oc_tools_host }}"
   until:

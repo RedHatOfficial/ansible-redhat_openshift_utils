@@ -38,5 +38,5 @@
   when: packages_need_update_result is changed
 
 - name: OCP | Update OS | Schedule Node
-  command: "oc adm manage-node {{ ansible_fqdn }} --schedulable=true"
+  command: "oc adm manage-node {{ inventory_hostname }} --schedulable=true"
   delegate_to: "{{ openshift_oc_tools_host }}"
