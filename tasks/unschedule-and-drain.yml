@@ -1,6 +1,6 @@
 ---
 - name: OCP | Unschedule Node
-  command: "oc adm manage-node {{ ansible_fqdn }} --schedulable=false"
+  command: "oc adm manage-node {{ inventory_hostname }} --schedulable=false"
 
 - name: OCP | Drain Node
-  command: "oc adm drain {{ ansible_fqdn }} --force --delete-local-data --ignore-daemonsets"
+  command: "oc adm drain {{ inventory_hostname }} --force --delete-local-data --ignore-daemonsets"

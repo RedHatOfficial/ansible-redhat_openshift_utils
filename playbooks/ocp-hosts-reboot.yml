@@ -1,6 +1,6 @@
 ---
 - name: OCP | Stop Application Nodes Services
-  hosts: app-nodes
+  hosts: app_nodes
   tasks:
     - name: Stop OpenShift App Node Services
       service:
@@ -11,7 +11,7 @@
         - docker
 
 - name: OCP | Stop Infrastructure Nodes Services
-  hosts: infra-nodes
+  hosts: infra_nodes
   tasks:
     - name: Stop OpenShift Infra Node Services
       service:
@@ -29,14 +29,14 @@
         reboot_only_if_needed: False
 
 - name: OCP | Reboot Infrastructure Nodes Hosts
-  hosts: infra-nodes
+  hosts: infra_nodes
   tasks:
     - include_tasks: tasks/reboot.yml
       vars:
         reboot_only_if_needed: False
 
 - name: OCP | Reboot Application Node Hosts
-  hosts: app-nodes
+  hosts: app_nodes
   tasks:
     - include_tasks: tasks/reboot.yml
       vars:
