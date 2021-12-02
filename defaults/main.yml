@@ -36,3 +36,6 @@ ocp_deployment_packages:
   - "kexec-tools"
   - "sos"
   - "psacct"
+
+package_update_async_timeout_seconds: 3600
+package_update_poll_seconds: 30
